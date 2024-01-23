@@ -23,7 +23,7 @@ class bcolors:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Runs all test cases.")
+    parser = argparse.ArgumentParser(description="Runs all test cases for a spesific hw assignment.")
     parser.add_argument("path_to_code", type=str,
                         help="The path to the code to run, for example '../hw1/hw1.out'.")
     parser.add_argument("--hw_num", type=int, default=1, nargs='?' ,
@@ -31,7 +31,7 @@ def main():
     parser.add_argument("--test_num", type=int, default=None, nargs='+',
                         help="Test number(s) to run, if not spesified will run all available tests")
     parser.add_argument("--path_to_save_results", type=str, default=None,
-                        help="The path to save result files of your code, default is in the test dir.")
+                        help="The path to save result files of your code, default is in the tests dir.")
     parser.add_argument("--dont_abort", action='store_true', default=False, 
                         help="If a test case fails continue to the next one. Default would abort.")
     parser.add_argument("--clean", action='store_true', default=False, 
@@ -62,6 +62,8 @@ def main():
     passed_tests = 0
     for in_path in in_paths:
         test_num = get_test_num(in_path)
+        if args.test_num and test_num not in args.test_num:
+            continue
         print(f"Running test {test_num}.", end=" ")
         res_path = os.path.join(results_dir, f"test{test_num}.res")
         out_path = os.path.join(tests_dir,   f"test{test_num}.out")
