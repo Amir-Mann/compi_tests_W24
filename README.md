@@ -29,11 +29,11 @@ run all tests and continue when failing:
 
 run tests 1, 2 and 3:
 
-`python runner.py ../hw2/hw2.out --test_num 1 2 3`
+`python runner.py ../hw1/hw1.out --test_num 1 2 3`
 
 remove all .res files from the tests dir:
 
-`python runner.py ../hw2/hw2.out --clean`
+`python runner.py ../hw1/hw1.out --clean`
 
 run all tests from assignment 2 (not implemented):
 
@@ -49,4 +49,4 @@ tests 50 - 99: tests with mainly strings
 
 tests 100 - 109: tests with strings and comments
 
-tests 110 - 999: tests for errors and their age cases
+tests 110 - 999: tests for errors and their edge cases
