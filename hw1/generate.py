@@ -159,6 +159,8 @@ def main():
                         help="Maximal amount of tokens in a test")
     parser.add_argument("--fully_random_tests", action='store_true', default=False, 
                         help="Generates tests that are completly random charecters. Default is False.")
+    parser.add_argument("--dont_generate", action='store_true', default=False, 
+                        help="Skips the whole generateion process and only creates new .out files.")
 
     args = parser.parse_args()
     
@@ -177,7 +179,9 @@ def main():
             print(f"finshed test {test_num} for {test_num - args.start} out of {args.amount} tests.")
             next_precentile_to_print += 0.1
         test_in = ""
-        if args.fully_random_tests:
+        if args.dont_generate:
+            pass
+        elif args.fully_random_tests:
             test_in += random.choice(['', '"', '"\\', '"\\x']) + "".join([chr(random.randint(0, random.choice([127, 255]))) for i in range(0, args.maximal_test_length)])
         elif args.allow_errors:
             for i in range(args.maximal_test_length):
@@ -191,9 +195,11 @@ def main():
                     test_in += "//"
                     continue
                 test_in += CHOOSE_TWICE(test_possible_tokens)
+        
         test_in_path = os.path.join(args.tests_dir, f"test{test_num}.in")
-        with open(test_in_path, "w") as test_in_file:
-            test_in_file.write(test_in)
+        if not args.dont_generate:
+            with open(test_in_path, "w") as test_in_file:
+                test_in_file.write(test_in)
 
         if args.reference_code != "":
             test_out_path = os.path.join(args.tests_dir, f"test{test_num}.out")
