@@ -178,7 +178,7 @@ def main():
             next_precentile_to_print += 0.1
         test_in = ""
         if args.fully_random_tests:
-            test_in += '"\\' + "".join([chr(random.randint(0, 127)) for i in range(0, args.maximal_test_length)])
+            test_in += random.choice(['', '"', '"\\', '"\\x']) + "".join([chr(random.randint(0, random.choice([127, 255]))) for i in range(0, args.maximal_test_length)])
         elif args.allow_errors:
             for i in range(args.maximal_test_length):
                 test_in += getLine() + random.choice(["\n","\r","\r\n"])
