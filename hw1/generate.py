@@ -144,20 +144,21 @@ def main():
     parser.add_argument("--start", type=int, default=1, 
                         help="Sets the starting number for test case generation. Useful for continuing from a previous set. Default is 1.")
     parser.add_argument("--allow_errors", action='store_true', default=False, 
-                        help="NOT IMPLEMENTED! Allows the generation of test cases with intentional errors. Useful for testing error handling. Default is False.")
+                        help="Allows the generation of test cases with intentional errors. Useful for testing error handling. Default is False.")
     parser.add_argument("--test_strings", action='store_true', default=False, 
                         help="Includes string-based test cases. Default is False.")
     parser.add_argument("--test_numbers", action='store_true', default=False, 
                         help="Includes number-based test cases. Default is False.")
     parser.add_argument("--test_comments", action='store_true', default=False, 
-                        help="NOT IMPLEMENTED! Includes test cases with comments for testing comment handling. Default is False.")
+                        help="Includes test cases with comments for testing comment handling. Default is False.")
     parser.add_argument("--tests_dir", type=str, default="tests", 
                         help="Specifies the directory where test cases will be stored. Default directory is 'tests'.")
     parser.add_argument("--reference_code", type=str, default="", 
                         help="Reference code ('./hw.out' file) to use to generate output files. Default not would generate outputs.")
     parser.add_argument("--maximal_test_length", type=int, default=1000, 
                         help="Maximal amount of tokens in a test")
-
+    parser.add_argument("--fully_random_tests", action='store_true', default=False, 
+                        help="Generates tests that are completly random charecters. Default is False.")
 
     args = parser.parse_args()
     
@@ -172,11 +173,13 @@ def main():
     safe_makedir(args.tests_dir)
     next_precentile_to_print = 0
     for test_num in range(args.start, args.start + args.amount):
-        if test_num / args.amount > next_precentile_to_print:
-            print(f"finshed {test_num} out of {args.amount} tests.")
+        if (test_num - args.start) / args.amount > next_precentile_to_print:
+            print(f"finshed test {test_num} for {test_num - args.start} out of {args.amount} tests.")
             next_precentile_to_print += 0.1
         test_in = ""
-        if args.allow_errors:
+        if args.fully_random_tests:
+            test_in += random.choice(['', '"', '"\\', '"\\x']) + "".join([chr(random.randint(0, random.choice([127, 255]))) for i in range(0, args.maximal_test_length)])
+        elif args.allow_errors:
             for i in range(args.maximal_test_length):
                 test_in += getLine() + random.choice(["\n","\r","\r\n"])
         else:
