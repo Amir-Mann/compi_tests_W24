@@ -21,23 +21,23 @@ running examples:
 
 run all tests and abort on first fail:
 
-`python runner.py ../hw1/hw1.out`
+`python runner.py ../compy_hw1/hw1.out`
 
 run all tests and continue when failing:
 
-`python runner.py ../hw1/hw1.out --dont_abort`
+`python runner.py ../compy_hw1/hw1.out --dont_abort`
 
 run tests 1, 2 and 3:
 
-`python runner.py ../hw1/hw1.out --test_num 1 2 3`
+`python runner.py ../compy_hw1/hw1.out --test_num 1 2 3`
 
 remove all .res files from the tests dir:
 
-`python runner.py ../hw1/hw1.out --clean`
+`python runner.py ../compy_hw1/hw1.out --clean`
 
 run all tests from assignment 2 (not implemented):
 
-`python runner.py ../hw2/hw2.out --hw_num 2`
+`python runner.py ../compy_hw2/hw2.out --hw_num 2`
 
 
 
