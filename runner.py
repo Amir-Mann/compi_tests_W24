@@ -74,7 +74,7 @@ def main():
                 exit()
             failed_tests += 1
             continue
-        with open(res_path, "r") as res_file, open(out_path, "r") as out_file:
+        with open(res_path, "r", encoding='ISO-8859-1') as res_file, open(out_path, "r", encoding='ISO-8859-1') as out_file:
             for i, (res_line, out_line) in enumerate(zip(res_file, out_file)):
                 if res_line == out_line:
                     continue
