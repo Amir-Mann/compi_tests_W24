@@ -41,7 +41,7 @@ def main():
 
     tests_dir = os.path.join(f"hw{args.hw_num}", "tests")
     if not os.path.isdir(tests_dir):
-        raise(RuntimeError("tests dir doesnt exist, probably invalid --hw_num, see --help for information."))
+        raise(RuntimeError("Tests dir doesnt exist, probably you are not in the runner.py dir,\nOr maybe --hw_num is wrong, see --help for information."))
     results_dir = args.path_to_save_results if args.path_to_save_results else tests_dir
 
     if args.clean:

@@ -17,7 +17,8 @@ Use python3.6 or above
 
 
 
-running examples:
+running examples: 
+Note that all examples assume you are running from the runner.py directory.
 
 run all tests and abort on first fail:
 
