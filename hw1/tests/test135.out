@@ -1,6 +1,3 @@
 1 BINOP +
 1 BYTE byte
-1 STRING Y 24707 " 	   "E 23530 mO5xJMezXM 	  67874 A9gV 57258 Gckw!=false!=mx1pG
-1 ID Y
-1 NUM 24707
-Error \
+Error undefined escape sequence x19
