@@ -27,7 +27,7 @@ RULES = {
         "continue;"
     ],
     "@Call": [
-        "$ID____ ( @Exp_ )"
+        "$ID____(@Exp_)"
     ],
     "@Type": [
         "int",
@@ -53,7 +53,7 @@ RULES = {
         "$STRING",
         "true",
         "false",
-        "NOT @Exp_",
+        "not @Exp_",
         "@Exp_ and @Exp_",
         "@Exp_ or @Exp_",
         "@Exp_ $RELOP_ @Exp_",
