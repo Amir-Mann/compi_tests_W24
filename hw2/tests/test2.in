@@ -1,14 +1,14 @@
-x - y * z
-x * y - z
-x - y - z
-x * y * z
-x + y / z
-x / y + z
-x + y + z
-x / y / z
-x - y / z
-x / y - z
-x - y + z
-x + y - z
-x / y * z
-x * y / z
+s = x - y * z;
+s = x * y - z;
+s = x - y - z;
+s = x * y * z;
+s = x + y / z;
+s = x / y + z;
+s = x + y + z;
+s = x / y / z;
+s = x - y / z;
+s = x / y - z;
+s = x - y + z;
+s = x + y - z;
+s = x / y * z;
+s = x * y / z;
