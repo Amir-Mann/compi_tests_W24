@@ -104,6 +104,12 @@ def random_comment():
         ]) + random.choice([" <3", " ^^", " uwu", " mother fucker...", "..", " :)", " :(", " bitch."])
 
 
+WHITE_SPACES = list(" \t\n\r")
+TOKENS_FOR_WS = list(";(){}")
+def random_whitespaces():
+    return "".join([random.choice(WHITE_SPACES) for i in range(random.randint(0, 2 ** random.randint(0, 6)))])
+
+
 RANDOM_REPLACEMENT = {
     "$ID____": random_id,
     "$NUM___": random_num,
@@ -112,6 +118,39 @@ RANDOM_REPLACEMENT = {
     "$COMENT": random_comment
 }
 
+TOKENS = [
+    "int",
+    "byte",
+    "bool",
+    "+",
+    "-",
+    "*",
+    "/",
+    "$ID____",
+    "$NUM___",
+    "$NUM___",
+    "b",
+    "$STRING",
+    "true",
+    "false",
+    "not",
+    "and",
+    "or",
+    "$RELOP_",
+    "(",
+    ")",
+    "//",
+    "{",
+    "}",
+    ";",
+    "=",
+    "return;",
+    "if",
+    "else",
+    "while",
+    "break",
+    "continue"
+]
 
 def main():
     parser = argparse.ArgumentParser(description="Script for generating test cases.")
@@ -119,8 +158,12 @@ def main():
                         help="Specifies the number of test cases to generate. Default is 50.")
     parser.add_argument("--start", type=int, default=1, 
                         help="Sets the starting number for test case generation. Useful for continuing from a previous set. Default is 1.")
-    parser.add_argument("--allow_errors", action='store_true', default=False, 
+    parser.add_argument("--allow_nuking", action='store_true', default=False, 
                         help="Allows the generation of test cases with intentional errors. Useful for testing error handling. Default is False.")
+    parser.add_argument("--allow_tokens", action='store_true', default=False, 
+                        help="Allows the generation of test cases with intentional errors. Useful for testing error handling. Default is False.")
+    parser.add_argument("--white_spaces", action='store_true', default=False, 
+                        help="Allows the generation of test cases with extra white spaces, would likly be less readable. Default is False.")
     parser.add_argument("--tests_dir", type=str, default="tests", 
                         help="Specifies the directory where test cases will be stored. Default directory is 'tests'.")
     parser.add_argument("--reference_code", type=str, default="", 
@@ -144,9 +187,7 @@ def main():
         test_in = ""
         if args.dont_generate:
             pass
-        elif args.allow_errors:
-            raise NotImplementedError("allow errors not implemnted")
-        else:
+        if not args.dont_generate:
             test_in = RULES["@Prog"][0] * args.min_test_length
             count_vars = args.min_test_length
             derivation_num = 0
@@ -170,6 +211,61 @@ def main():
                 test_in = test_in[:i] + RANDOM_REPLACEMENT[test_in[i: i + 7]]() + test_in[i+7:]
 
                 count_needs_choosing -= 1
+
+        if args.allow_nuking or args.allow_tokens:
+            p = random.random()
+            if (args.allow_nuking and p > 0.5) or not args.allow_tokens: # NUKING, insert random char in random place
+                l = len(test_in)
+                indexs_to_nuke = sorted(list(random.sample(range((3 * l) // 4, l), 10)))
+                for passed_insertions, i in enumerate(indexs_to_nuke):
+                    index = i + passed_insertions
+                    test_in = test_in[:index] + chr(random.randint(32, 127)) + test_in[index:]
+            else: # insert a random token
+                for t in TOKENS_FOR_WS:
+                    test_in = test_in.replace(t, f" {t} ")
+                for comment in re.findall("//.*", test_in):
+                    test_in = test_in.replace(comment, "_".join(comment.split()) + ";")
+                splited_test = test_in.split()
+                l = len(splited_test)
+                indexs_to_insert = sorted(list(random.sample(range((3 * l) // 4, l), 10)))
+                for passed_insertions, i in enumerate(indexs_to_insert):
+                    index = i + passed_insertions
+                    splited_test = splited_test[:index] + [random.choice(TOKENS)] + splited_test[index:]
+                test_in = " ".join(splited_test).replace(";", ";\n").replace("\n ", "\n")
+                count_needs_choosing = len(re.findall(r"\$", test_in))
+                while count_needs_choosing:
+                    i = test_in.find("$")
+                    test_in = test_in[:i] + RANDOM_REPLACEMENT[test_in[i: i + 7]]() + test_in[i+7:]
+
+                    count_needs_choosing -= 1
+                
+        
+        if args.white_spaces:
+            old_test_in = test_in
+            test_in = ""
+            for char in old_test_in:
+                if char in WHITE_SPACES:
+                    p = random.random()
+                    if p > 0.8:
+                        test_in += char
+                    elif p > 0.5:
+                        test_in += random_whitespaces()
+                elif char in TOKENS_FOR_WS:
+                    p = random.random()
+                    if p > 0.7:
+                        test_in += random_whitespaces()
+                        test_in += char
+                    elif p > 0.4:
+                        test_in += char
+                        test_in += random_whitespaces()
+                    else:
+                        test_in += char
+                else:
+                    test_in += char
+
+
+
+
         
         test_in_path = os.path.join(args.tests_dir, f"test{test_num}.in")
         if not args.dont_generate:

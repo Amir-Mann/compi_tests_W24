@@ -75,7 +75,9 @@ def main():
             failed_tests += 1
             continue
         with open(res_path, "r", encoding='ISO-8859-1') as res_file, open(out_path, "r", encoding='ISO-8859-1') as out_file:
-            for i, (res_line, out_line) in enumerate(zip(res_file, out_file)):
+            lines_res = res_file.readlines()
+            lines_out = out_file.readlines()
+            for i, (res_line, out_line) in enumerate(zip(lines_res, lines_out)):
                 if res_line == out_line:
                     continue
                 print(f"{bcolors.FAIL}Failed{bcolors.ENDC} do to diff in line {i}!")
@@ -87,8 +89,21 @@ def main():
                 failed_tests += 1
                 break
             else:
-                print(f"{bcolors.OKGREEN}Passed!{bcolors.ENDC}")
-                passed_tests += 1
+                if len(lines_res) == 0:
+                    print(f"{bcolors.FAIL}Failed{bcolors.ENDC} because there is no contant in the test{test_num}.res file. Most likely your executable did not run at all.")
+                    print(f"Check that you are using the right path and the warnning that might be printed. If you are confused run this using -h flag.")
+                    print(f"Lastly you should read the README.md before use and can ask in the group for advice.")
+                    if not args.dont_abort:
+                        exit()
+                    failed_tests += 1
+                elif len(lines_res) != len(lines_out):
+                    print(f"{bcolors.FAIL}Failed{bcolors.ENDC} Because all amount of lines differes. your file has {len(lines_res)} lines and expected {len(lines_out)} lines.")
+                    if not args.dont_abort:
+                        exit()
+                    failed_tests += 1
+                else:
+                    print(f"{bcolors.OKGREEN}Passed!{bcolors.ENDC}")
+                    passed_tests += 1
     message = ""
     if passed_tests:
         message += f"{bcolors.OKGREEN}Passed {passed_tests}{bcolors.ENDC} tests. "
