@@ -81,9 +81,9 @@ def main():
                 if res_line == out_line:
                     continue
                 print(f"{bcolors.FAIL}Failed{bcolors.ENDC} do to diff in line {i}!")
-                print(f" Your output is:\n{res_line}\n Expected output is:\n{out_line}")
+                print(f"Your output is:\n{res_line}\n Expected output is:\n{out_line}")
                 print(f"You can use this google forms to see how many have the same problem (report 'test={test_num}, line={i}''):")
-                print("https://docs.google.com/forms/d/e/1FAIpQLSfhSETdznSglj7sJN3sLbz4zBocgYPbdEQe27xGnK4PXr_oKQ/viewform?usp=sf_link")
+                print("https://forms.gle/AJhBFWhPhMZpg3hY7")
                 if not args.dont_abort:
                     exit()
                 failed_tests += 1
@@ -97,7 +97,7 @@ def main():
                         exit()
                     failed_tests += 1
                 elif len(lines_res) != len(lines_out):
-                    print(f"{bcolors.FAIL}Failed{bcolors.ENDC} Because all amount of lines differes. your file has {len(lines_res)} lines and expected {len(lines_out)} lines.")
+                    print(f"{bcolors.FAIL}Failed{bcolors.ENDC} Because all amount of lines differes. Your file has {len(lines_res)} lines and expected {len(lines_out)} lines.")
                     if not args.dont_abort:
                         exit()
                     failed_tests += 1

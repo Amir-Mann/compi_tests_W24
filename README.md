@@ -1,7 +1,7 @@
 ## Tests failing survay
-If you fail a test, you can fill this survay:
+If you fail a test, you can fill this survay: (for HW2)
 
-https://docs.google.com/forms/d/e/1FAIpQLSfhSETdznSglj7sJN3sLbz4zBocgYPbdEQe27xGnK4PXr_oKQ/viewform?usp=sf_link
+https://forms.gle/AJhBFWhPhMZpg3hY7
 
 The use is that problem with the tests themselves might be discuvered this way.
 
@@ -41,8 +41,16 @@ run all tests from assignment 2 (not implemented):
 `python3 runner.py ../compy_hw2/hw2.out --hw_num 2`
 
 
+## Tests structure HW2:
+tests 0 - 9: Hand crafted test to check basic rules order and automata. More easy to read.
+tests 10 - 11: Longer tests with easy to read structure for easier debuging.
+tests 12 - 49: Longer tests with no white space variation and no errornus gramers / lexemas.
+tests 50 - 99: Inserted random tokens into the tests for non vaiable grammers.
+tests 100 - 199: Insterd random charectes into the tests for non vaiable grammers and lexamas.
+tests 200 - 399: Inserted random charecters and tokens into the tests with varing whitesapces formats, for maximal cheotic outputs that should stiil have some output.
 
-## Tests structure:
+
+## Tests structure HW1:
 
 tests 0 - 49: simple tests without strings, comments or expected errors.
 
