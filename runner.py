@@ -26,7 +26,7 @@ def main():
     parser = argparse.ArgumentParser(description="Runs all test cases for a spesific hw assignment.")
     parser.add_argument("path_to_code", type=str,
                         help="The path to the code to run, for example '../hw1/hw1.out'.")
-    parser.add_argument("--hw_num", type=int, default=2, nargs='?' ,
+    parser.add_argument("--hw_num", type=int, default=3, nargs='?' ,
                         help="Which assignment is it. default is 2")
     parser.add_argument("--test_num", type=int, default=None, nargs='+',
                         help="Test number(s) to run, if not spesified will run all available tests")
