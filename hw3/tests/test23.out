@@ -12,4 +12,5 @@ c BOOL 2
 ---end scope---
 ---end scope---
 a BOOL 1
+---end scope---
 line 25: variable a is not defined
