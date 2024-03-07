@@ -83,7 +83,7 @@ def main():
                 print(f"{bcolors.FAIL}Failed{bcolors.ENDC} do to diff in line {i}!")
                 print(f"Your output is:\n{res_line}\n Expected output is:\n{out_line}")
                 print(f"You can use this google forms to see how many have the same problem (report 'test={test_num}, line={i}''):")
-                print("https://forms.gle/AJhBFWhPhMZpg3hY7")
+                print("https://forms.gle/PP42J2BajZfXUqYw9")
                 if not args.dont_abort:
                     exit()
                 failed_tests += 1

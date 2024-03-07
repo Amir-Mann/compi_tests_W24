@@ -1,7 +1,7 @@
 ## Tests failing survay
 If you fail a test, you can fill this survay: (for HW2)
 
-https://forms.gle/AJhBFWhPhMZpg3hY7
+https://forms.gle/PP42J2BajZfXUqYw9
 
 The use is that problem with the tests themselves might be discuvered this way.
 
