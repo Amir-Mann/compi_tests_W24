@@ -1,7 +1,7 @@
 ## Tests failing survay
-If you fail a test, you can fill this survay: (for HW2)
+If you fail a test, you can fill this survay: (for HW5)
 
-https://forms.gle/PP42J2BajZfXUqYw9
+https://forms.gle/2YTDWPPEgowLpKVA6
 
 The use is that problem with the tests themselves might be discuvered this way.
 
@@ -39,6 +39,19 @@ remove all .res files from the tests dir:
 run all tests from assignment 2 (not implemented):
 
 `python3 runner.py ../compy_hw2/hw2.out --hw_num 2`
+
+
+## Tests structure H5:
+tests 1 and 2: Segel tests
+test 3 printi and simple arithmatic expresions
+test 4 intergers stored as variables
+tests 5 6 7 8 print(STRING), IF, IF ELSE and boolian experessions
+tests 9 10 loops
+test 11 bytes
+test 12, 13 whiles inside whiles, boolians as variables.
+tests 14, 17 readi
+tests 15, 16 more stuff
+
 
 
 ## Tests structure HW2:

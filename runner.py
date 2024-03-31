@@ -26,8 +26,8 @@ def main():
     parser = argparse.ArgumentParser(description="Runs all test cases for a spesific hw assignment.")
     parser.add_argument("path_to_code", type=str,
                         help="The path to the code to run, for example '../hw1/hw1.out'.")
-    parser.add_argument("--hw_num", type=int, default=3, nargs='?' ,
-                        help="Which assignment is it. default is 2")
+    parser.add_argument("--hw_num", type=int, default=5, nargs='?' ,
+                        help="Which assignment is it. default is 5")
     parser.add_argument("--test_num", type=int, default=None, nargs='+',
                         help="Test number(s) to run, if not spesified will run all available tests")
     parser.add_argument("--path_to_save_results", type=str, default=None,
@@ -54,20 +54,61 @@ def main():
                     removed_files += 1
         print(f"Removed {removed_files} .res files.")
         exit()
-
+    
     files = os.listdir(tests_dir)
-    in_paths = sorted([os.path.join(tests_dir, f) for f in files if f[-3:] == ".in"], 
-                      key=get_test_num)
+    test_nums = []
+    if args.hw_num == 5:
+        temp_testnums = set()
+        sub_tests = {}
+        for test_num in [re.findall("\d+", fname) for fname in files if fname[-3:] == ".in"]:
+            if len(test_num) >= 1:
+                temp_testnums.add(test_num[0])
+            if len(test_num) >= 2:
+                if not test_num[0] in sub_tests:
+                    sub_tests[test_num[0]] = []
+                sub_tests[test_num[0]].append(test_num[1])
+        
+        for test in temp_testnums:
+            if test not in sub_tests:
+                test_nums.append(int(test))
+                continue
+            for sub_test in sub_tests[test]:
+                test_nums.append((int(test), int(sub_test)))
+        test_nums = sorted(test_nums, key=lambda val: val if isinstance(val, int) else val[0])
+    else:
+        in_paths = sorted([os.path.join(tests_dir, f) for f in files if f[-3:] == ".in"], 
+                            key=get_test_num)
+        for in_path in in_paths:
+            test_num = get_test_num(in_path)
+            test_nums.append(test_num)
+            
+        
+    
+    
     failed_tests = 0
     passed_tests = 0
-    for in_path in in_paths:
-        test_num = get_test_num(in_path)
-        if args.test_num and test_num not in args.test_num:
+    for test_num in test_nums:
+        if args.test_num and (test_num not in args.test_num or (isinstance(test_num, tuple) and test_num[0] not in args.test_num)):
             continue
         print(f"Running test {test_num}.", end=" ")
+        in_path = os.path.join(results_dir, f"test{test_num}.in")
         res_path = os.path.join(results_dir, f"test{test_num}.res")
         out_path = os.path.join(tests_dir,   f"test{test_num}.out")
-        os.system(f"{args.path_to_code} < {in_path} > {res_path}")
+        if args.hw_num == 5:
+            if isinstance(test_num, tuple):    
+                test_num, sub_test_num = test_num
+                in_path = os.path.join(results_dir, f"test{test_num}.in")
+                in_in_path = os.path.join(results_dir, f"test{test_num}.in{sub_test_num}.in")
+                temp_path = os.path.join(results_dir, f"temp_test{test_num}.lli.res{sub_test_num}.res")
+                res_path = os.path.join(results_dir, f"test{test_num}.res{sub_test_num}.res")
+                out_path = os.path.join(tests_dir,   f"test{test_num}.out{sub_test_num}.out")
+            else:
+                temp_path = os.path.join(results_dir, f"temp_test{test_num}.ill.res")
+                in_in_path = in_path
+            os.system(f"{args.path_to_code} < {in_path} > {temp_path}")
+            os.system(f"lli {temp_path} < {in_in_path} > {res_path}")
+        else:
+            os.system(f"{args.path_to_code} < {in_path} > {res_path}")
         if not os.path.isfile(res_path):
             print(f"{bcolors.FAIL}Failed{bcolors.ENDC} to generate results file!")
             if not args.dont_abort:
@@ -83,16 +124,18 @@ def main():
                 print(f"{bcolors.FAIL}Failed{bcolors.ENDC} do to diff in line {i}!")
                 print(f"Your output is:\n{res_line}\n Expected output is:\n{out_line}")
                 print(f"You can use this google forms to see how many have the same problem (report 'test={test_num}, line={i}''):")
-                print("https://forms.gle/PP42J2BajZfXUqYw9")
+                print("https://forms.gle/2YTDWPPEgowLpKVA6")
                 if not args.dont_abort:
                     exit()
                 failed_tests += 1
                 break
             else:
                 if len(lines_res) == 0:
-                    print(f"{bcolors.FAIL}Failed{bcolors.ENDC} because there is no contant in the test{test_num}.res file. Most likely your executable did not run at all.")
-                    print(f"Check that you are using the right path and the warnning that might be printed. If you are confused run this using -h flag.")
-                    print(f"Lastly you should read the README.md before use and can ask in the group for advice.")
+                    print(f"{bcolors.FAIL}Failed{bcolors.ENDC} because there is no contant in {res_path} file. Common causes:")
+                    print(f"* Wrong path to you executable (see --help or README.md)")
+                    if args.hw_num == 5:
+                        print(f"* The llvm code Doesn't run. Error message would pop above. See {temp_path} for your code.")
+                        print(f"* Your parser clames there is a lexical / syntax / semantical error. (Error message would pop above)")
                     if not args.dont_abort:
                         exit()
                     failed_tests += 1
