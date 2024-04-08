@@ -28,6 +28,10 @@ run all tests and continue when failing:
 
 `python3 runner.py ../compy_hw5/hw5.out --dont_abort`
 
+by default the error channel is part of the output, to ignore it:
+
+`python3 runner.py ../compy_hw5/hw5.out --exclude_error`
+
 run tests 1, 2 and 3:
 
 `python3 runner.py ../compy_hw5/hw5.out --test_num 1 2 3`

@@ -35,8 +35,10 @@ def main():
     parser.add_argument("--dont_abort", action='store_true', default=False, 
                         help="If a test case fails continue to the next one. Default would abort.")
     parser.add_argument("--clean", action='store_true', default=False, 
-                        help="Remove all .res files from path_to_save_results(or tests dir if uspesified) instead of testing.")    
-    
+                        help="Remove all .res files from path_to_save_results(or tests dir if uspesified) instead of testing.")
+    parser.add_argument("--exclude_error", action='store_true', default=False,
+                        help="Don't include error chanel output in the result file.")
+
     args = parser.parse_args()
 
     tests_dir = os.path.join(f"hw{args.hw_num}", "tests")
@@ -106,9 +108,15 @@ def main():
                 temp_path = os.path.join(results_dir, f"temp_test{test_num}.ill.res")
                 in_in_path = in_path
             os.system(f"{args.path_to_code} < {in_path} > {temp_path}")
-            os.system(f"lli {temp_path} < {in_in_path} > {res_path}")
+            if args.exclude_error:
+                os.system(f"lli {temp_path} < {in_in_path} > {res_path}")
+            else:
+                os.system(f"lli {temp_path} < {in_in_path} &> {res_path}")
         else:
-            os.system(f"{args.path_to_code} < {in_path} > {res_path}")
+            if args.exclude_error:
+                os.system(f"{args.path_to_code} < {in_path} > {res_path}")
+            else:
+                os.system(f"{args.path_to_code} < {in_path} &> {res_path}")
         if not os.path.isfile(res_path):
             print(f"{bcolors.FAIL}Failed{bcolors.ENDC} to generate results file!")
             if not args.dont_abort:
